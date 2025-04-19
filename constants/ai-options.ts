@@ -1,0 +1,16 @@
+export const AI_OPTIONS = [
+  { value: "GPT-4", label: "GPT-4" },
+  { value: "GPT-4o", label: "GPT-4o" },
+  { value: "GPT-3.5", label: "GPT-3.5" },
+  { value: "Claude 3", label: "Claude 3" },
+  { value: "Claude 3 Opus", label: "Claude 3 Opus" },
+  { value: "Claude 3 Sonnet", label: "Claude 3 Sonnet" },
+  { value: "Claude 3 Haiku", label: "Claude 3 Haiku" },
+  { value: "Midjourney", label: "Midjourney" },
+  { value: "DALL·E 3", label: "DALL·E 3" },
+  { value: "Stable Diffusion", label: "Stable Diffusion" },
+  { value: "Gemini", label: "Gemini" },
+  { value: "Llama 3", label: "Llama 3" },
+  { value: "Multiple AIs", label: "Multiple AIs" },
+  { value: "Other", label: "Other" },
+];
