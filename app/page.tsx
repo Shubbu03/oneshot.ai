@@ -1,6 +1,5 @@
 import ProjectFeed from "@/components/project-feed";
 import { createClient } from "@/lib/supabase/server";
-import AnimatedBackground from "@/components/animated-background";
 
 export const revalidate = 300;
 
@@ -18,8 +17,6 @@ export default async function Home() {
 
   return (
     <div className="space-y-8 relative">
-      <AnimatedBackground />
-
       <section className="text-center py-10 relative z-10">
         <h1 className="text-4xl font-bold mb-4">OneShot.ai</h1>
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
