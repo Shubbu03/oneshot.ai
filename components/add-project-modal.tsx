@@ -77,18 +77,31 @@ export default function AddProjectModal({
     setIsSubmitting(true);
 
     try {
-      const { error } = await supabase.from("projects").insert([
-        {
-          ...values,
-          likes: 0,
-        },
-      ]);
+      const { error } = await supabase
+        .from("projects")
+        .insert([
+          {
+            ...values,
+            likes: 0,
+          },
+        ])
+        .select();
 
       if (error) throw error;
 
       toast.success("Project added successfully!", {
         description: "Your project has been added to the feed.",
       });
+
+      const { data: refreshedProjects } = await supabase
+        .from("projects")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      const event = new CustomEvent("projectAdded", {
+        detail: refreshedProjects,
+      });
+      window.dispatchEvent(event);
 
       form.reset();
       onClose();

@@ -6,6 +6,7 @@ import type { Project } from "@/types/project";
 import { createClient } from "@/lib/supabase/client";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 interface ProjectFeedProps {
   initialProjects: Project[];
@@ -14,6 +15,28 @@ interface ProjectFeedProps {
 export default function ProjectFeed({ initialProjects }: ProjectFeedProps) {
   const [projects, setProjects] = useState<Project[]>(initialProjects);
   const supabase = createClient();
+  const isMobile = useMediaQuery("(max-width: 640px)");
+  const isTablet = useMediaQuery("(min-width: 641px) and (max-width: 1024px)");
+
+  useEffect(() => {
+    const handleProjectAdded = (event: CustomEvent<Project[]>) => {
+      if (event.detail) {
+        setProjects(event.detail);
+      }
+    };
+
+    window.addEventListener(
+      "projectAdded",
+      handleProjectAdded as EventListener
+    );
+
+    return () => {
+      window.removeEventListener(
+        "projectAdded",
+        handleProjectAdded as EventListener
+      );
+    };
+  }, []);
 
   useEffect(() => {
     const channel = supabase
@@ -64,7 +87,7 @@ export default function ProjectFeed({ initialProjects }: ProjectFeedProps) {
       if (data) {
         setProjects(data);
       }
-    }, 5 * 60 * 1000); // 5 minutes
+    }, 5 * 60 * 1000);
 
     return () => clearInterval(interval);
   }, [supabase]);
@@ -81,8 +104,14 @@ export default function ProjectFeed({ initialProjects }: ProjectFeedProps) {
     );
   }
 
+  const gridCols = isMobile
+    ? "grid-cols-1"
+    : isTablet
+    ? "grid-cols-2"
+    : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4";
+
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    <div className={`grid ${gridCols} gap-4 sm:gap-6`}>
       {projects.map((project, index) => (
         <motion.div
           key={project.id}

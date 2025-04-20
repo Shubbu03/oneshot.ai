@@ -11,6 +11,7 @@ interface LikeButtonProps {
   initialLikes: number;
   size?: "default" | "sm";
   className?: string;
+  onLikeChange?: (isLiked: boolean) => void;
 }
 
 export default function LikeButton({
@@ -18,6 +19,7 @@ export default function LikeButton({
   initialLikes,
   size = "default",
   className,
+  onLikeChange,
 }: LikeButtonProps) {
   const [likes, setLikes] = useState(initialLikes);
   const [isLiked, setIsLiked] = useState(false);
@@ -28,8 +30,13 @@ export default function LikeButton({
     const likedProjects = JSON.parse(
       localStorage.getItem("likedProjects") || "[]"
     );
-    setIsLiked(likedProjects.includes(projectId));
-  }, [projectId]);
+    const liked = likedProjects.includes(projectId);
+    setIsLiked(liked);
+
+    if (onLikeChange) {
+      onLikeChange(liked);
+    }
+  }, [projectId, onLikeChange]);
 
   const handleLike = async () => {
     if (isUpdating) return;
@@ -72,6 +79,10 @@ export default function LikeButton({
       }
 
       setIsLiked(newLikeStatus);
+
+      if (onLikeChange) {
+        onLikeChange(newLikeStatus);
+      }
     } catch (error) {
       console.error("Error updating likes:", error);
     } finally {
@@ -85,7 +96,7 @@ export default function LikeButton({
       size={size}
       onClick={handleLike}
       disabled={isUpdating}
-      className={cn("flex items-center gap-1", className)}
+      className={cn("flex items-center gap-1 cursor-pointer", className)}
     >
       <Heart
         className={cn(
