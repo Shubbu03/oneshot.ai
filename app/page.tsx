@@ -1,5 +1,6 @@
 import ProjectFeed from "@/components/project-feed";
 import { createClient } from "@/lib/supabase/server";
+import AnimatedBackground from "@/components/animated-background";
 
 export const revalidate = 300;
 
@@ -16,8 +17,10 @@ export default async function Home() {
   }
 
   return (
-    <div className="space-y-8">
-      <section className="text-center py-10">
+    <div className="space-y-8 relative">
+      <AnimatedBackground />
+
+      <section className="text-center py-10 relative z-10">
         <h1 className="text-4xl font-bold mb-4">OneShot.ai</h1>
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
           Discover amazing projects built with AI. From GPT-4 to Midjourney, see
@@ -25,7 +28,9 @@ export default async function Home() {
         </p>
       </section>
 
-      <ProjectFeed initialProjects={projects || []} />
+      <div className="relative z-10">
+        <ProjectFeed initialProjects={projects || []} />
+      </div>
     </div>
   );
 }
